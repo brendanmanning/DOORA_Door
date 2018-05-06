@@ -1,6 +1,6 @@
   /**
    * **************************************************** *
-   *                    DOORA (SENSOR)                    *
+   *                     DOORA (DOOR)                     *
    *              Bishop Shanahan STEM Team               * 
    *             Programmer: Brendan Manning              *
    *            Copyright 2018 Brendan Manning            *
@@ -35,8 +35,7 @@
    */
    IPAddress ip(192,168,1,244);
    unsigned int LOCAL_PORT = 8989;
-   char[] WIFI_NETWORK = "sunset_home";
-   char[] WIFI_PASSWORD = "Lucy@1226";
+   char[] WIFI_NETWORK = "sunset_home";   char[] WIFI_PASSWORD = "Lucy@1226";
    
 void setup() {
 
