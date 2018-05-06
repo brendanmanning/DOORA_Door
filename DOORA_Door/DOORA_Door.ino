@@ -13,54 +13,67 @@
   #include "SSWiFi.h"
   #include <WiFiUdp.h>
 
-String READY_MSG = "Arduino is ready!";
-bool isConnected = false;
+  // Define WiFi connection objects
+  SSWiFi wifi =  SSWiFi();
+  WiFiUDP Udp;
 
-SSWiFi wifi =  SSWiFi();
-WiFiUDP Udp;
-IPAddress ip(192,168,1,244);
+  /**
+   * Runtime variables
+   *   char[] packetBuffer = Buffer that holds incoming messages
+   */
+  char packetBuffer[255];
+  bool isConnected = false; 
 
-unsigned int localPort = 8989;      // local port to listen on
-
-char packetBuffer[255]; //buffer to hold incoming packet
-char  ReplyBuffer[] = "acknowledged";       // a string to send back
-
-void setup() {
-   Serial.begin(9600);
-   while(!Serial){
-       // Do nothing... Wait for serial connection
-       isConnected  = false;
-   }
-   // If we were not connected, it means we need to greet with READY_MSG
-   if(!isConnected ){
-       isConnected = true;
-       Serial.println(READY_MSG);
-   }
+  /**
+   * Program options
+   *    IPAddress ip = The IP address the door should assign itself to on the LAN
+   *    unsigned int LOCAL_PORT = The port the door should listen to for messages
+   *    
+   *    char[] WIFI_NETWORK = WiFi network name
+   *    char[] WIFI_PASSWORD = WiFi password
+   *    
+   */
+   IPAddress ip(192,168,1,244);
+   unsigned int LOCAL_PORT = 8989;
+   char[] WIFI_NETWORK = "sunset_home";
+   char[] WIFI_PASSWORD = "Lucy@1226";
    
-   // attempt to connect using WPA2 encryption:
+void setup() {
+
+  // Wait until serial connection confirmed
+  Serial.begin(9600);
+  while(!Serial)
+      isConnected  = false;
+  isConnected = true;
+   
+   // Attempt to connect using WPA2 encryption:
   Serial.println("Attempting to connect to WPA network...");
   WiFi.config(ip);
-  int status = WiFi.begin("sunset_home", "Lucy@1226");
+  int status = WiFi.begin(WIFI_NETWORK, WIFI_PASSWORD);
 
-  // if you're not connected, stop here:
+  // If connection failed, log this information and halt the device
   if ( status != WL_CONNECTED) { 
-    Serial.println("Couldn't get a wifi connection");
+    Serial.println("Couldn't get a wifi connection.");
     wifi.listNetworks();
-    while(true);
+    pinMode(6, OUTPUT);
+    while(true) {
+      digitalWrite(6, HIGH);
+    }
   } 
+  
   // if you are connected, print out info about the connection:
   else {
-    Serial.println("Connected to network");
 
-IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);
+    // Begin UDP connection
+    Udp.begin(LOCAL_PORT);
 
-
-Udp.begin(localPort);
+    // Emit a Serial message indicating the device is ready!
+    Serial.println("----------------------------------------");
+    Serial.println("             DOORA IS READY!            ");
+    Serial.print("        IP Address: "); Serial.println(localIp);
+    Serial.println("----------------------------------------");
+ 
   }
-
-  
 }
 
 void loop() {
