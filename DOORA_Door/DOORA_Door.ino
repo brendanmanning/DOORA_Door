@@ -49,6 +49,10 @@ void setup() {
 
   // Wait until serial connection confirmed
   Serial.begin(9600);
+
+  pinMode(6, OUTPUT);
+
+  
   while(!Serial)
       isConnected  = false;
   isConnected = true;
@@ -62,7 +66,6 @@ void setup() {
   if ( status != WL_CONNECTED) { 
     Serial.println("Couldn't get a wifi connection.");
     wifi.listNetworks();
-    pinMode(6, OUTPUT);
     while(true) {
       digitalWrite(6, HIGH);
     }
@@ -138,6 +141,9 @@ void handlePacket(char packet[]) {
   Serial.println("Unlock door.");
   Serial.print("\tFrom: "); Serial.println(sender);
   Serial.print("\tMethod: "); Serial.println(method);
+ 
+
+  digitalWrite(6, LOW);
  }
 
  /**
