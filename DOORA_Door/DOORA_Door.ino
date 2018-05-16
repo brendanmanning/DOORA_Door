@@ -42,8 +42,8 @@
    bool M_LOG_NETWORK_STATS = true;
    IPAddress ip(192,168,1,244);
    unsigned int LOCAL_PORT = 8989;
-   char WIFI_NETWORK[] = "sunset_home";   
-   char WIFI_PASSWORD[] = "Lucy@1226";
+char WIFI_NETWORK[] = "Alcatel LINKZONE 4212";
+char WIFI_PASSWORD[] = "01524212";
    
 void setup() {
 
